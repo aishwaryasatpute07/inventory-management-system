@@ -8,56 +8,35 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long userId;
-    @Column(name = "firstname")
-    private String userFirstName;
-    @Column(name = "lastname")
-    private String userLastName;
-    @Column(name = "username")
+    @Column(name = "name")
     private String userName;
-    @Column(name = "password")
-    private String userPassword;
     @Column(name = "email")
     private String userEmail;
-    @Column(name = "isCustomer")
-    private Boolean isCustomer = false;
+    @Column(name = "password")
+    private String userPassword;
+    @Column(name = "address")
+    private String userAddress;
+    @Column(name = "role")
+    private Boolean isUser = true;
 
     public User() {
     }
 
-    public User(String userEmail, String userPassword, String userName, String userLastName, String userFirstName, Long userId, Boolean isCustomer) {
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-        this.userName = userName;
-        this.userLastName = userLastName;
-        this.userFirstName = userFirstName;
+    public User(Long userId, String userName, String userEmail, String userPassword, String userAddress, Boolean isUser) {
         this.userId = userId;
-        this.isCustomer = isCustomer;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userAddress = userAddress;
+        this.userPassword = userPassword;
+        this.isUser = isUser;
     }
 
-
-    //Getters and Setters
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public String getUserFirstName() {
-        return userFirstName;
-    }
-
-    public void setUserFirstName(String userFirstName) {
-        this.userFirstName = userFirstName;
-    }
-
-    public String getUserLastName() {
-        return userLastName;
-    }
-
-    public void setUserLastName(String userLastName) {
-        this.userLastName = userLastName;
     }
 
     public String getUserName() {
@@ -68,14 +47,6 @@ public class User {
         this.userName = userName;
     }
 
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
     public String getUserEmail() {
         return userEmail;
     }
@@ -84,8 +55,39 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public Boolean getIsCustomer(){return isCustomer;}
+    public String getUserPassword() {
+        return userPassword;
+    }
 
-    public void setIsCustomer(Boolean isCustomer){this.isCustomer = isCustomer;}
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
 
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public Boolean getUser() {
+        return isUser;
+    }
+
+    public void setUser(Boolean user) {
+        isUser = user;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userAddress='" + userAddress + '\'' +
+                ", isUser=" + isUser +
+                '}';
+    }
 }

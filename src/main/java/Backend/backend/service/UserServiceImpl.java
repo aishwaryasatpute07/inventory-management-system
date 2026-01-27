@@ -1,9 +1,7 @@
 package Backend.backend.service;
 
-import Backend.backend.model.Customer;
 import Backend.backend.model.User;
 import Backend.backend.model.UserDTO;
-import Backend.backend.repository.CustomerRepository;
 import Backend.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,17 +11,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
     @Override
-    public List<UserDTO> getAllUsers(){
-        System.out.println(userRepository.findAll());
+    public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
@@ -36,27 +30,15 @@ public class UserServiceImpl implements UserService{
     public UserDTO saveUser(UserDTO userDTO) {
         User user = convertToEntity(userDTO);
         User savedUser = userRepository.save(user);
-
-        Long customerId = user.getUserId();
-        String customerName = user.getUserFirstName();
-        String customerEmail = user.getUserEmail();
-        String customerPassword = user.getUserPassword();
-        Boolean isUser = true;
-        Customer customerUser = new Customer(customerId, customerName, customerEmail, customerPassword, "", isUser);
-
-        if(user.getIsCustomer()){
-            Customer savedCustomer = customerRepository.save(customerUser);
-        }
-
         return convertToDTO(savedUser);
     }
+
 
     @Override
     public UserDTO updateUser(Long userId, UserDTO userDTO) {
         User user = userRepository.findById(userId).orElseThrow();
-        user.setUserFirstName(userDTO.userFirstName());
-        user.setUserLastName(userDTO.userLastName());
-        user.setUserEmail(userDTO.userEmail());
+        user.setUserName(userDTO.userName());
+        user.setUserAddress(userDTO.userAddress());
         User updatedUser = userRepository.save(user);
         return convertToDTO(updatedUser);
     }
@@ -68,14 +50,17 @@ public class UserServiceImpl implements UserService{
 
     //Conversion methods between DTO and Entity
     private UserDTO convertToDTO(User user) {
-        return new UserDTO(user.getUserEmail(), user.getUserFirstName(), user.getUserLastName(), user.getUserName(),user.getUserId(), user.getIsCustomer());
+        return new UserDTO(user.getUserId(), user.getUserName(),user.getUserPassword(), user.getUserEmail(), user.getUserAddress(), user.getUser());
     }
 
     private User convertToEntity(UserDTO userDTO) {
         User user = new User();
-        user.setUserFirstName(userDTO.userFirstName());
-        user.setUserLastName(userDTO.userLastName());
+        user.setUserName(userDTO.userName());
+        user.setUserAddress(userDTO.userAddress());
+        user.setUserPassword(userDTO.userPassword());
         user.setUserEmail(userDTO.userEmail());
+        user.setUser(userDTO.isUser());
+
         return user;
     }
 }
