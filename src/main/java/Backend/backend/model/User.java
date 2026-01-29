@@ -8,27 +8,92 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long userId;
-    @Column(name = "name")
-    private String userName;
+
+    @Column(name = "fullname")
+    private String fullName;
+
     @Column(name = "email")
     private String userEmail;
+
+    @Column(name = "username", unique = true)
+    private String username;
+
     @Column(name = "password")
     private String userPassword;
+
+    @Column(name = "security_question")
+    private String securityQuestion;
+
+    @Column(name = "security_answer")
+    private String securityAnswer;
+
+    @Column(name = "company_name")
+    private String companyName;
+
+    @Column(name = "industry")
+    private String industry; // e.g., IT, Retail, Manufacturing, etc.
+
     @Column(name = "address")
     private String userAddress;
+
     @Column(name = "role")
     private Boolean isUser = true;
 
     public User() {
     }
 
-    public User(Long userId, String userName, String userEmail, String userPassword, String userAddress, Boolean isUser) {
+    public User(Long userId, String fullName, String userEmail, String userPassword, String userAddress, String username, String securityQuestion, String securityAnswer, String companyName, String industry, Boolean isUser) {
         this.userId = userId;
-        this.userName = userName;
+        this.fullName = fullName;
         this.userEmail = userEmail;
         this.userAddress = userAddress;
         this.userPassword = userPassword;
+        this.username = username;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+        this.companyName = companyName;
+        this.industry = industry;
         this.isUser = isUser;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getSecurityQuestion() {
+        return securityQuestion;
+    }
+
+    public void setSecurityQuestion(String securityQuestion) {
+        this.securityQuestion = securityQuestion;
+    }
+
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 
     public Long getUserId() {
@@ -39,12 +104,12 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getfullName() {
+        return fullName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setfullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getUserEmail() {
@@ -83,10 +148,15 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", userName='" + userName + '\'' +
+                ", userName='" + fullName + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userAddress='" + userAddress + '\'' +
+                ", FullName='" + fullName + '\''+
+                ", SecurityQuestion='" + securityQuestion + '\'' +
+                "' SecurityAnswer='" + securityAnswer + '\'' +
+                ", CompanyName='" + companyName + '\'' +
+                ", Industry='" + industry + '\'' +
                 ", isUser=" + isUser +
                 '}';
     }

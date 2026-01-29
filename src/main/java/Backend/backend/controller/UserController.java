@@ -3,6 +3,7 @@ package Backend.backend.controller;
 import Backend.backend.model.UserDTO;
 import Backend.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +22,38 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long userId){
+    @GetMapping("/{id:[0-9]+}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id:[0-9]+") Long userId){
         Optional<UserDTO> user = userService.getUserById(userId);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        return userService.saveUser(userDTO);
+    @GetMapping("/{by-email}")
+    public ResponseEntity<List<UserDTO>> getUserByEmail(
+            @RequestParam String email) {
+
+        List<UserDTO> users = userService.findByUserEmail(email);
+
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(users);
+    }
+
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+
+        try {
+            UserDTO savedUser = userService.saveUser(userDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+
+        } catch (RuntimeException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT) // 409
+                    .body(ex.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

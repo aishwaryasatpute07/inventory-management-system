@@ -8,7 +8,10 @@ import java.util.Optional;
 public interface UserService {
     List<UserDTO> getAllUsers();
 
+    List<UserDTO> findByUserEmail(String userEmail);
+
     Optional<UserDTO> getUserById(Long userId);
+
 
     UserDTO saveUser(UserDTO userDTO);
 
