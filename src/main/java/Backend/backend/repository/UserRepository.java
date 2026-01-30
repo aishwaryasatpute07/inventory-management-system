@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findByUserEmail(String userEmail);
+    List<User> findByUserEmailIgnoreCase(String userEmail);
     boolean existsByUserEmail(String userEmail);
 }

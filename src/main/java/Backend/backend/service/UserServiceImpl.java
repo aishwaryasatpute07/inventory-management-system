@@ -23,12 +23,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findByUserEmail(String userEmail) {
-        return userRepository.findByUserEmail(userEmail)
+    public List<UserDTO> findByUserEmailIgnoreCase(String userEmail) {
+        userEmail = userEmail.trim(); // remove extra spaces
+        return userRepository.findByUserEmailIgnoreCase(userEmail) // use IgnoreCase
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
 
 
     @Override
@@ -48,15 +50,10 @@ public class UserServiceImpl implements UserService {
         if (!Objects.equals(userDTO.userPassword(), userDTO.confirmPassword())) {
             throw new RuntimeException("Password and Confirm Password do not match");
         }
-
-
-
         User user = convertToEntity(userDTO);
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
     }
-
-
 
     @Override
     public UserDTO updateUser(Long userId, UserDTO userDTO) {

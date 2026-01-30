@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,24 +23,31 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id:[0-9]+}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable("id:[0-9]+") Long userId){
+    @GetMapping("/getUserById/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long userId){
         Optional<UserDTO> user = userService.getUserById(userId);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{by-email}")
-    public ResponseEntity<List<UserDTO>> getUserByEmail(
+    @GetMapping("/getUserByEmail")
+    public ResponseEntity<Map<String, Object>> getUserByEmail(
             @RequestParam String email) {
 
-        List<UserDTO> users = userService.findByUserEmail(email);
+        List<UserDTO> users = userService.findByUserEmailIgnoreCase(email);
 
         if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User not found"));
         }
 
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(
+                Map.of(
+                        "message", "User fetched successfully",
+                        "data", users
+                )
+        );
     }
+
 
 
     @PostMapping("/create")
@@ -57,18 +65,28 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long userId, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> updateUser(
+            @PathVariable Long id,
+            @RequestBody UserDTO userDTO) {
+
         try {
-            UserDTO updateUser = userService.updateUser(userId, userDTO);
-            return ResponseEntity.ok(updateUser);
+            userService.updateUser(id, userDTO);
+            return ResponseEntity.ok("User updated successfully");
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User not found");
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long userId) {
-        userService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("User not found");
+        }
     }
+
 }
