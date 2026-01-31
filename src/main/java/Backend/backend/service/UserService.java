@@ -18,4 +18,6 @@ public interface UserService {
     UserDTO updateUser(Long userId, UserDTO userDTO);
 
     void deleteUser(Long userId);
+
+    boolean login(String username, String userPassword);
 }

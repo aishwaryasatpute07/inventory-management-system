@@ -78,6 +78,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String userPassword) {
+        boolean authenticated = userService.login(username, userPassword);
+        if (authenticated) {
+            return "User login successfully";
+        } else {
+            return "Please check credentials";
+        }
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {

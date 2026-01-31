@@ -66,6 +66,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean login(String username, String userPassword) {
+        return userRepository.login(username, userPassword).isPresent();
+    }
+
+    @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }
