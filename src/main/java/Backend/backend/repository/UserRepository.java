@@ -13,6 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByUserEmailIgnoreCase(String userEmail);
     boolean existsByUserEmail(String userEmail);
     // Use @Query to safely query isUser without changing the field
-    @Query("SELECT u FROM User u WHERE u.username = :username AND u.password = :password")
-    Optional<User> login(@Param("username") String username, @Param("password") String password);
+    @Query("SELECT u FROM User u WHERE u.username = :username AND u.userPassword = :userPassword")
+    Optional<User> login(@Param("username") String username, @Param("userPassword") String userPassword);
 }
